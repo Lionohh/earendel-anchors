@@ -1,0 +1,4 @@
+earendel trust_records weekly anchor
+generated_kst: 2026-07-08T12:21:04+0900
+rows: 5
+chain_digest_sha256: 90b4b7ee718e38849773f88cb4233669d70b66966b45635041ee06778b8c560c
