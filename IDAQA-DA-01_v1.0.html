@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDAQA-DA/01 — 1차 생산물 데이터 무결성 표준 v1.0</title>
+<style>
+  :root{--paper:#FFF8F0;--ink:#2C2C2C;--nat6:#2D5016;--nat8:#0F2908;
+        --apr5:#FF8C42;--earth2:#E0D4C1;--earth5:#8B6F47}
+  *{box-sizing:border-box}
+  body{margin:0;background:#EDE7DC;color:var(--ink);
+       font-family:"Noto Serif KR","Batang",serif;line-height:1.9;font-size:15px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 0 60px}
+  .doc{background:var(--paper);padding:52px 60px;box-shadow:0 2px 18px rgba(0,0,0,.12)}
+  .kv{font-family:-apple-system,"Noto Sans KR",sans-serif}
+  h1{font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:25px;font-weight:800;
+     margin:0 0 6px;color:var(--nat6);letter-spacing:-.4px}
+  .sub{font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:14px;color:var(--earth5);margin-bottom:4px}
+  .rule{height:3px;background:var(--nat6);margin:18px 0 6px}
+  .rule2{height:1px;background:var(--earth2);margin:0 0 26px}
+  h2{font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:17px;font-weight:800;
+     margin:34px 0 10px;color:var(--nat8);padding-bottom:6px;border-bottom:1.5px solid var(--earth2)}
+  h3{font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:14.5px;font-weight:700;margin:18px 0 6px;color:var(--nat6)}
+  p{margin:8px 0;text-align:justify}
+  ol,ul{margin:8px 0 8px 20px;padding:0} li{margin:5px 0;text-align:justify}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.4px;
+        font-family:-apple-system,"Noto Sans KR",sans-serif}
+  th,td{border:1px solid var(--earth2);padding:7px 9px;vertical-align:top;text-align:left}
+  th{background:#F3EDE3;font-weight:700}
+  .box{border-left:4px solid var(--apr5);background:#FDF3E9;padding:12px 16px;margin:14px 0;
+       font-size:14px;font-family:-apple-system,"Noto Sans KR",sans-serif;line-height:1.8}
+  .meta{font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:13.5px;
+        display:grid;grid-template-columns:120px 1fr;gap:4px 14px;margin:16px 0 0}
+  .meta div:nth-child(odd){color:var(--earth5);font-weight:700}
+  code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+       background:#F3EDE3;padding:1px 5px;border-radius:3px}
+  .foot{font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:12.5px;color:var(--earth5);
+        margin-top:34px;padding-top:16px;border-top:1.5px solid var(--earth2);line-height:1.8}
+  .stamp{text-align:right;margin-top:30px;font-family:-apple-system,"Noto Sans KR",sans-serif;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="doc">
+
+<div class="sub">IDAQA — Integrity of Data for Assured Quality</div>
+<h1>1차 생산물 데이터 무결성 표준</h1>
+<div class="sub">표준 번호 <b>IDAQA-DA/01</b> · 판 <b>v1.0</b> · 시행 2026년 8월 · 제정·운영 <b>에렌델</b></div>
+<div class="rule"></div><div class="rule2"></div>
+
+<div class="box">
+<b>이 표준은 무엇인가</b><br>
+1차 생산물의 재배·수확 기록을 <b>어떻게 봉인하고 어떻게 검증할지</b>를 정한 규격입니다.
+이 규격에 따라 발급되는 문서가 <b>데이터 품질 보증서</b>입니다.<br><br>
+<b>에렌델은 제3자 인증기관이 아닙니다.</b> 이 표준을 만들고 운영하는 사업자입니다.
+독립성은 기관이 아니라, 에렌델이 통제할 수 없는 <b>외부 시각인증기관의 시점 토큰</b>과
+<b>누구나 열람할 수 있는 공개 저장소</b>에서 나옵니다.
+</div>
+
+<h2>제1조 (목적)</h2>
+<p>이 표준은 1차 생산물의 생육·수확 과정에서 기록된 데이터가 기록 이후 변경되지 아니하였음을
+제3자가 독립적으로 확인할 수 있도록, 기록·봉인·시점확인·검증의 요건과 절차를 정함을 목적으로 한다.</p>
+
+<h2>제2조 (적용 범위)</h2>
+<ol>
+<li>이 표준은 농산물·수산물·임산물 등 <b>1차 생산물</b>에 적용한다. 신청 시점의 실증 대상은 살구이며,
+품목별 고유 속성은 기록 항목의 구성으로 처리한다.</li>
+<li>적용 구간은 <b>재배 개시부터 수확·인도 시점까지</b>로 한다.</li>
+<li>인도 이후의 보관·운송 구간은 현재 적용 범위에 포함되지 아니하며,
+적용 범위는 기술 실증의 진전에 따라 <b>단계적으로 확장</b>한다.</li>
+</ol>
+
+<h2>제3조 (용어의 정의)</h2>
+<table>
+<tr><th style="width:130px">용어</th><th>정의</th></tr>
+<tr><td>기록</td><td>생육·수확 과정에서 관측되거나 입력된 값과 그 시각</td></tr>
+<tr><td>요약값</td><td>기록에 대하여 정해진 방식으로 산출한 고정 길이의 값. 원본이 한 글자라도 달라지면 값이 달라진다</td></tr>
+<tr><td>원장</td><td>기록의 요약값을 앞뒤로 연쇄 결합하여 축적한 자료 구조. 추가만 가능하고 수정·삭제 경로를 두지 아니한다</td></tr>
+<tr><td>봉인</td><td>기록을 원장에 추가하여 이후 변경이 검출 가능하게 만드는 절차</td></tr>
+<tr><td>시점확인</td><td>외부 시각인증기관이 특정 값의 존재 시각을 서명으로 증명하는 절차</td></tr>
+<tr><td>검증</td><td>공개된 자료만으로 봉인과 시점확인의 성립 여부를 재현하여 확인하는 절차</td></tr>
+<tr><td>보증서</td><td>이 표준에 따라 검증된 결과를 표시하여 발급하는 문서</td></tr>
+<tr><td>발급자</td><td>이 표준에 따라 보증서를 발급하는 자. 현재 에렌델</td></tr>
+<tr><td>생산자</td><td>기록의 대상이 되는 1차 생산물을 생산하고 기록을 입력하는 자</td></tr>
+</table>
+
+<h2>제4조 (표준의 제정·운영 주체)</h2>
+<ol>
+<li>이 표준은 <b>에렌델</b>(사업자등록번호 652-15-02725)이 제정하고 운영한다.</li>
+<li>에렌델은 <b>제3자 인증기관이 아니며</b>, 공적 인증 권한을 위임받은 바 없다.</li>
+<li>이 표준의 독립성은 조직의 지위가 아니라 <b>제6조의 외부 시점확인</b>과
+<b>제7조의 공개</b>에 의하여 확보된다.</li>
+<li>「IDAQA」는 에렌델이 출원한 상표(40-2026-0136670, 제42류·제35류)이며,
+표준의 명칭으로 사용한다.</li>
+</ol>
+
+<h2>제5조 (기록 요건)</h2>
+<ol>
+<li>기록은 다음 항목을 포함한다. ① 관측·수확 일시 ② 대상 구역 또는 개체 ③ 측정·판정 값
+④ 입력 주체.</li>
+<li>필수 항목에 결측이 있는 기록은 <b>보증서의 해당 지표 산출에서 제외</b>하고, 그 사유를 표시한다.</li>
+<li>결측을 추정값으로 대체하지 아니한다.</li>
+<li>기록의 입력은 생산자가 수행하며, 발급자는 입력값을 대신 생성하지 아니한다.</li>
+</ol>
+<div class="box">
+<b>제5조 제2항·제3항의 실제 적용 예</b> — 2026년 수확 45건 중 일부에 개체 식별 정보가 결합되어 있지
+아니하여, <b>품종별 수확량은 산출·표시하지 아니한다.</b> 등급별·구역별 분포는 전수 확보되어 표시한다.
+</div>
+
+<h2>제6조 (봉인 및 시점확인 절차)</h2>
+<ol>
+<li><b>봉인</b> — 기록의 요약값을 산출하고 직전 기록의 요약값과 결합하여 원장에 추가한다.
+원장은 추가 전용으로 운영하며 수정·삭제 경로를 두지 아니한다.</li>
+<li><b>시점확인</b> — 원장 전체의 요약값을 산출하여 외부 시각인증기관에
+<b>RFC 3161</b> 규격으로 시점확인을 요청하고, 회신된 토큰을 발급기관의 공개 인증서로 즉시 재검증한다.</li>
+<li>시점확인은 <b>주 1회 이상</b> 자동으로 수행한다.</li>
+<li>재검증에 실패한 경우 절차를 중단하고 그 사실을 기록한다.</li>
+<li>봉인과 시점확인은 자동으로 수행되며, <b>생산자의 별도 조작을 요구하지 아니한다.</b></li>
+</ol>
+
+<h2>제7조 (공개 및 검증)</h2>
+<ol>
+<li>봉인 대상 문서, 시점확인 요청 파일, 회신 토큰, 발급기관 인증서를
+<b>공개 저장소에 게시</b>한다.</li>
+<li>검증에 필요한 절차를 함께 게시한다.</li>
+<li>제3자는 <b>계정 생성이나 권한 부여 없이</b> 공개 자료만으로 검증을 수행할 수 있다.
+발급자의 협조를 요구하지 아니한다.</li>
+<li>공개 자료에는 개인정보 및 거래 정보를 포함하지 아니한다.</li>
+</ol>
+<table>
+<tr><th style="width:150px">공개 위치</th><td><code>https://github.com/Lionohh/earendel-anchors</code></td></tr>
+<tr><th>검증 절차</th><td>같은 저장소의 <code>VERIFY.md</code></td></tr>
+<tr><th>필요 도구</th><td>OpenSSL. 그 밖의 프로그램을 요구하지 아니한다</td></tr>
+</table>
+
+<h2>제8조 (검증 범위)</h2>
+<div class="box">
+<b>이 조는 보증서가 무엇을 확인하는지를 정한다.</b>
+</div>
+<ol>
+<li><b>확인하는 사항</b>
+  <ul>
+  <li>기록된 값이 기록 이후 변경되지 아니하였다는 사실</li>
+  <li>해당 기록이 특정 시각에 이미 존재하였다는 사실</li>
+  <li>기록의 완전성(필수 항목의 결측 여부)</li>
+  </ul></li>
+<li><b>현재 적용 범위에 포함되지 아니하는 사항</b>
+  <ul>
+  <li>기록된 값이 실제 상태와 일치하는지 여부</li>
+  <li>인도 이후 보관·운송 과정에서의 상태 변화</li>
+  </ul></li>
+<li>제2항의 사항은 기술 실증의 진전에 따라 <b>단계적으로 적용 범위에 편입</b>할 수 있으며,
+편입 시 이 표준을 개정하고 개정 이력을 공개한다.</li>
+<li>보증서에는 발급 시점의 적용 범위를 표시한다.</li>
+</ol>
+
+<h2>제9조 (책임의 배분)</h2>
+<div class="box">
+<b>이 조는 손해가 발생하였을 때 원인을 어떻게 가려내는지를 정한다.</b>
+이 표준은 발급자가 생산물의 품질에 대한 책임을 대신 부담하는 구조가 아니라,
+<b>책임의 소재를 특정할 수 있게 하는 구조</b>이다.
+</div>
+<table>
+<tr><th style="width:150px">원인</th><th>책임</th><th style="width:230px">판별 방법</th></tr>
+<tr><td><b>① 봉인·검증 절차의 하자</b></td><td>발급자</td>
+    <td>검증 기록과 외부 시점 토큰. 절차가 정상 수행되었는지는 공개 자료로 재현 확인 가능</td></tr>
+<tr><td><b>② 기록이 사실과 다름</b></td><td>생산자</td>
+    <td>봉인 기록이 입력 주체·시각·값을 특정한다. 사후 조작이 아니라 입력 시점의 문제임이 구분된다</td></tr>
+<tr><td><b>③ 인도 이후의 상태 변화</b></td><td>적용 범위 밖</td>
+    <td>제8조 제2항에 따라 발급 시점에 고지된다</td></tr>
+</table>
+<ol>
+<li>발급자의 책임은 <b>이 표준이 정한 절차를 이행할 의무</b>에 한한다.</li>
+<li>생산자는 기록의 사실성에 대하여 책임을 진다.</li>
+<li>보증서 이용자는 제8조의 적용 범위를 확인한 후 이용한다.</li>
+<li>분쟁이 발생한 경우, 당사자는 공개 자료를 이용하여 원인을 확인할 수 있다.</li>
+</ol>
+
+<h2>제10조 (보증서 표시 사항)</h2>
+<h3>필수 표시</h3>
+<ol>
+<li>표준 번호 및 판(<code>IDAQA-DA/01</code>)</li>
+<li>발급자 및 발급일</li>
+<li>기록 기간 및 대상</li>
+<li>검증 지표와 그 산출 근거</li>
+<li>원장 요약값 및 시점확인 방식</li>
+<li>검증 절차에 접근할 수 있는 경로</li>
+<li><b>적용 범위 고지</b>(제8조)</li>
+</ol>
+<h3>금지 표시</h3>
+<ol>
+<li>제3자 인증기관에 의한 인증인 것처럼 오인하게 하는 표시</li>
+<li>생산물의 품질을 보증한다는 표시</li>
+<li>학습 기반 예측 결과를 실측값으로 오인하게 하는 표시</li>
+<li>결측으로 산출할 수 없는 항목의 추정 표시</li>
+</ol>
+
+<h2>제11조 (표준의 개정)</h2>
+<ol>
+<li>이 표준은 판 번호로 관리하며, 개정 시 이전 판을 보존한다.</li>
+<li>개정 이력을 공개한다.</li>
+<li>이 표준 문서의 요약값을 <b>제6조의 시점확인 대상에 포함</b>한다.
+이로써 표준 문서 자체의 사후 변경도 검출 가능하게 한다.</li>
+</ol>
+<div class="box">
+<b>제11조 제3항의 의미</b> — 표준을 만든 자가 그 표준을 나중에 몰래 고치면 표준의 의미가 없어진다.
+따라서 이 문서 자체를 이 문서가 정한 방식으로 봉인한다.
+</div>
+
+<h2>부칙</h2>
+<ol>
+<li>이 표준은 2026년 8월부터 시행한다.</li>
+<li>시행 당시 이미 발급된 보증서는 이 표준에 따라 발급된 것으로 본다.</li>
+</ol>
+
+<div class="meta">
+  <div>표준 번호</div><div>IDAQA-DA/01</div>
+  <div>판</div><div>v1.0</div>
+  <div>제정·운영</div><div>에렌델 (652-15-02725)</div>
+  <div>공개 위치</div><div>idaqa.org · idaqa.kr</div>
+  <div>검증 자료</div><div>github.com/Lionohh/earendel-anchors</div>
+</div>
+
+<div class="stamp">
+2026년 8월 　　일<br><br>
+에 렌 델　대표　오 종 혁
+</div>
+
+<div class="foot">
+<b>IDAQA — Integrity of Data for Assured Quality</b><br>
+A standard for sealing and verifying primary-produce records, defined and operated by Earendel.
+<b>The assurance applies to the data, not to the product.</b>
+Earendel is not a third-party certification body; independence comes from RFC 3161 timestamps
+issued by an external authority and from a public archive that anyone can verify without our cooperation.<br><br>
+에렌델 · 경상북도 칠곡군 석적읍 신기길 62-5, 2층 · ceo@earendel.kr · 054-975-1127
+</div>
+
+</div>
+</div>
+</body>
+</html>
