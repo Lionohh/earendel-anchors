@@ -1,54 +1,74 @@
 # 검증 방법
 
-필요한 것은 OpenSSL 하나뿐입니다. 에렌델의 서버에 접속하거나 계정을 만들 필요가 없습니다.
+필요한 것은 OpenSSL과 SHA-256 도구뿐입니다. 에렌델 서버나 계정은 필요하지 않습니다.
 
-## 1. 토큰의 서명 검증
-openssl ts -verify
--in anchors/anchor_20260803.tsr
--queryfile anchors/anchor_20260803.tsq
--CAfile certs/cacert.pem
--untrusted certs/tsa.crt
+아래 예시는 `20260914` 회차를 확인합니다. 다른 회차는 날짜만 바꾸십시오.
 
+```bash
+anchor_date=20260914
+```
 
-`Verification: OK` 가 나오면 해당 토큰이 발급기관의 서명을 받은 진본입니다.
+## 1. 공개 파일의 SHA-256 확인
 
-## 2. 봉인 대상 문서와 토큰이 일치하는지
-
-sha256sum anchors/anchor_20260803.txt
-openssl ts -reply -in anchors/anchor_20260803.tsr -text | grep -A1 "Message data"
-
-
-두 값이 같으면, 그 문서가 **토큰에 기록된 시각에 이미 존재했다**는 뜻입니다.
-문서를 한 글자라도 고치면 값이 달라지므로 사후 수정이 성립하지 않습니다.
-
-## 3. 발급 시각 확인
-
-openssl ts -reply -in anchors/anchor_20260803.tsr -text | grep -E "Time stamp|Serial number"
-
-
-## 4. 소급 수정이 없었음을 확인
-
-`INDEX.csv`의 `chain_digest` 열을 회차순으로 보십시오.
-
-- 원장에 새 기록이 추가되지 않은 구간에서는 **값이 동일**해야 합니다
-- 값이 바뀐 회차는 **기록 수(rows)도 함께 증가**해야 합니다
-
-기록 수가 그대로인데 값만 바뀐 회차가 있다면 과거 기록이 수정된 것입니다.
-현재까지 그런 회차는 없습니다.
-
-## 5. 토큰 일련번호의 순서 확인
-
-`INDEX.csv`의 `tsa_serial` 열을 보십시오. 발급 시각 순서와 일련번호 순서가 일치합니다.
-
-이 번호는 발급기관이 전 세계 요청에 순차적으로 부여하므로 신청인이 선택할 수 없습니다.
-특정 시점의 토큰을 나중에 만들어 끼워 넣으려면 그 시점의 번호 구간을 확보해야 하는데,
-그 구간은 이미 다른 이용자의 토큰이 점유하고 있습니다.
-
-## 6. 파일 무결성
-
+```bash
 sha256sum -c SHA256SUMS
+```
 
+모든 항목이 `OK`이면 현재 내려받은 공개 파일이 `SHA256SUMS`와 일치합니다.
+
+## 2. 시점 토큰과 요청 파일 확인
+
+```bash
+openssl ts -verify \
+  -in "anchors/anchor_${anchor_date}.tsr" \
+  -queryfile "anchors/anchor_${anchor_date}.tsq" \
+  -CAfile certs/cacert.pem
+```
+
+`Verification: OK`가 나오면 토큰의 서명과 요청 파일의 메시지 지문이 일치합니다.
+
+## 3. 봉인 대상 문서와 토큰 확인
+
+```bash
+openssl ts -verify \
+  -in "anchors/anchor_${anchor_date}.tsr" \
+  -data "anchors/anchor_${anchor_date}.txt" \
+  -CAfile certs/cacert.pem
+```
+
+`Verification: OK`가 나오면 공개된 봉인 대상 문서의 SHA-256 지문이 토큰의 메시지 지문과 일치합니다. 따라서 해당 문서는 토큰에 기록된 시각까지 존재했으며, 이후 내용이 바뀌면 검증에 실패합니다.
+
+## 4. TSA 발급 시각과 일련번호 확인
+
+```bash
+openssl ts -reply \
+  -in "anchors/anchor_${anchor_date}.tsr" \
+  -text |
+grep -E "Serial number|Time stamp"
+```
+
+출력의 `Time stamp`가 RFC 3161 토큰 내부의 `genTime`입니다. `INDEX.csv`의 `tsa_gentime_utc` 값과 대조하십시오.
+
+GitHub 커밋 시각은 공개 저장소에 게시된 시각입니다. TSA 발급 시각과 다를 수 있으며, 시점확인의 기준은 토큰의 `genTime`입니다.
+
+## OpenSSL 경고 안내
+
+`certs/tsa.crt`는 TSA의 최종 서명 인증서이며 CA 인증서가 아닙니다. 이 파일을 `-untrusted` 옵션에 넣으면 다음 경고가 발생할 수 있습니다.
+
+```text
+Warning: certificate ... is not a CA cert
+```
+
+이는 `-untrusted`가 중간 CA 인증서를 받는 옵션이기 때문입니다. 현재 공개된 `.tsr`에는 서명 인증서가 포함되어 있으므로 위 명령처럼 신뢰 루트인 `certs/cacert.pem`만 `-CAfile`로 지정하십시오. 이 방식으로 `Verification: OK`를 확인할 수 있습니다.
+
+## 5. 원장 요약 변화 확인
+
+`INDEX.csv`의 `chain_digest`와 `rows`를 회차순으로 대조하십시오.
+
+- 원장에 새 기록이 추가되지 않은 구간에서는 `chain_digest`가 동일해야 합니다.
+- `chain_digest`가 바뀐 회차는 `rows`의 변화와 함께 검토해야 합니다.
+- 회차 날짜, TSA `genTime`, GitHub 게시 시각은 서로 다른 의미를 가질 수 있습니다.
 
 ## 검증에 실패했다면
 
-ceo@earendel.kr 로 알려주십시오. 검증 실패는 저희에게 가장 중요한 정보입니다.
+실패한 회차, 실행한 명령, OpenSSL 버전과 오류 출력을 [ceo@earendel.kr](mailto:ceo@earendel.kr)로 알려주십시오.
